@@ -32,17 +32,24 @@ let aSearch = "Wight"; // Author / Authoress search
 //Might need more than one depending on what I want to do. 
 let criteria = ""; 
 
-const searchResults = [];
+let searchResults = [];
 
+
+
+////////////////////////////////////////////////////////////
+//                     Listeners
+////////////////////////////////////////////////////////////
 
 //On Search button click get the value of 
 $inpDivEle.on("click","button", function(event){
+    resetResults();
     // If nothing was typed in : do nothing
     if($inpSearchEle.val()===""){
         console.log("nothing");
         return;
     }
     search = $inpSearchEle.val();
+    $inpSearchEle.val("");
    
     // If the author is given
     if(search.toLowerCase().includes("by")){
@@ -55,14 +62,13 @@ $inpDivEle.on("click","button", function(event){
 
         console.log(`Title: ${tSearch}  Author: ${aSearch}`);
 
-        const promise = $.ajax({
+        //AJAX Call
+        $.ajax({
             url: `https://www.googleapis.com/books/v1/volumes?q=${tSearch}+${criteria}${aSearch}&key=${myKey}`
-        });
-        
-        promise.then(
+        }).then(
             (data) => {
                 console.log(data);
-                jsonToBook(data);
+                jsonToBook(data.items);
             },
 
             (error) => {
@@ -71,36 +77,62 @@ $inpDivEle.on("click","button", function(event){
         ); // .then() 
     } // If author is given
 
-    // else { // If unsure what is asking
-    //     const promise = $.ajax({
-    //         url: `https://www.googleapis.com/books/v1/volumes?q=${search}&key=${myKey}`
-    //     });
+    else { // If unsure what is asking
+        const promise = $.ajax({
+            url: `https://www.googleapis.com/books/v1/volumes?q=${search}&key=${myKey}`
+        });
         
-    //     promise.then(
-    //         (data) => {
-    //             console.log(data);
-    //             jsonToBook(data);
-    //         },
+        promise.then(
+            (data) => {
+                console.log(data);
+                jsonToBook(data.items);
+            },
 
-    //         (error) => {
-    //             console.log('bad request: ', error);
-    //         }
-    //     ); // .then() 
+            (error) => {
+                console.log('bad request: ', error);
+            }
+        ); // .then() 
 
-
-
-
-
-
-
-
-    // }// Else
+    }// Else
 }); // Event Listener Bracket
+
+
+
+////////////////////////////////////////////////////////////
+//                     Functions
+////////////////////////////////////////////////////////////=
 
 function jsonToBook(data){
     console.log("called correctly");
+    console.log(data);
+   
+    for(let i=0; i<data.length; i++){
+        const tempBook = new book(
+            data[i].volumeInfo.title,
+            data[i].volumeInfo.authors);
 
+        console.log("----------------");
+        console.log(tempBook.title);
+        console.log(tempBook.author);
+
+        searchResults.push(tempBook);
+    }//For end
+    displayResults(searchResults);
 } //jsonToBook
+
+function displayResults(results){
+    for(let i=0; i<results.length; i++){
+        console.log(results[i]);
+        let $tempEle = $(`<li>Title: ${results[i].title} <br> Author: ${results[i].author[0]}<br><br></li>`);
+        $resultsEle.append($tempEle);
+
+    }//For
+}// displayResults 
+
+function resetResults(){
+    searchResults = [];
+    $resultsEle.html("");
+}
 
 
 //Autocomplete
