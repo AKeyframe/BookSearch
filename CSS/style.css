@@ -1,0 +1,28 @@
+body {
+    background-color: lightslategray;
+}
+
+main {
+    display: flex;
+    flex-direction:column;
+    justify-content: center;
+    align-items: center;
+}
+
+#inputFields {
+    display: inline;
+}
+
+#mainInput {
+    border: solid;
+    border-radius: 20px;
+    height: 30px;
+    width: 325px;
+}
+
+#searchButton {
+    border: solid black;
+    border-radius: 15px;
+    height: 35px;
+    width: 75px;
+}
