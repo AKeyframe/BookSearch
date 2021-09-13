@@ -23,7 +23,6 @@ Description Here
 
 - AAU I should be able to click on any title that google books allows you to read and be taken to a book reader via google books.
 
-- AAU I should have a pleasent experience on both standard or mobile device.
 
 #### Strech goals
 - AAU I should be able to add any of the search results to a "To Read List". I should be able to come back to this page and still see my "To Read List"
