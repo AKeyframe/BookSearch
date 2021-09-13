@@ -69,6 +69,7 @@ $inpDivEle.on("submit", function(event){
 
 function ajaxCall(){
     // If the author is given
+    // This is indicated with a "by"
     if(search.toLowerCase().includes("by")){
         let tempArr = search.toLowerCase().split(" ");
         let byIndex = tempArr.lastIndexOf("by");
@@ -127,7 +128,6 @@ function ajaxCall(){
 
 function jsonToBook(data){
     let defaultCoverImage = "/Images/noImageThumbnail.jpg";
-    
 
     for(let i=0; i<data.length; i++){
         let isbns = getISBNS(data[i].volumeInfo.industryIdentifiers);
@@ -145,11 +145,12 @@ function jsonToBook(data){
         if(typeof tempBook.cover === "undefined"){
             tempBook.cover = defaultCoverImage;
         }
-        console.log("BOOK OBJECT   "+tempBook.pageCount);
+
         searchResults.push(tempBook);
     }//For end
     displayResults(searchResults);
 } //jsonToBook
+
 
 
 //Checks to see what ISBN is associated with the book
@@ -206,7 +207,7 @@ function resetResults(){
     aSearch = "";
     criteria = "";
     searchResults = [];
-    $resultsEle.html("");
+    $resultsEle.empty();
 }
 
 function displayNoResults(){
