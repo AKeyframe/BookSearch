@@ -1,5 +1,26 @@
 const myKey = "AIzaSyB8eDxehjMJ-G-cGeKJb0HfPK4J0owl-yk";
 
+// Init element variables
+const $inpDivEle = $("#inputElements");
+const $inpSearchEle = $("#mainInput");
+const $btnSearchEle = $("#searchButton");
+
+const $resultsDivEle = $("#results");
+
+// Init data variables
+// Search is used when no author is given && to split into tSearch and aSearch
+let search = "";
+let tSearch = ""; // Title search
+let aSearch = ""; // Author / Authoress search
+
+//String responsible for letting the api know what additional search modifiers
+//Might need more than one depending on what I want to do. 
+let criteria = ""; 
+
+let searchResults = [];
+let saveToLocal =[]; //Array used for local storage
+
+
 // Class decleration for easier acces of JSON data later.
 //constructor funtion supplies the paramters
  //every time a new book is created. 
@@ -12,6 +33,7 @@ class book {
         this.pageCount = pageCount;
         this.published = published;
         this.isbn = isbn;
+        this.inList = false;
           
     }
 
@@ -22,7 +44,7 @@ class book {
         let $bookDiv = $("<div class='bookDiv'>");
         let $bookCover = $(`<img class="bookInfo" src="${this.cover}">`);
         let $bookTitle = $(`<h2 class="bookInfo">${this.title}</h2>`);
-        let $bookAuthor = $(`<h3 class="bookInfo">By ${this.author}</h3>`);
+        let $bookAuthor = $(`<h4 class="bookInfo">By ${this.author}</h4>`);
 
         //Might need to alter description based on length
         let $bookDescription = $(`<p class="bookInfo">${this.description}</p>`);
@@ -36,28 +58,20 @@ class book {
                 $bookPDate, $bookISBN);
 
         return $bookDiv;
+    }//addDataToDiv()
+
+
+    //This method returns the book as a standard javaScript object
+    //Method necessary for JSON.stringify()
+    toObject(){
+        return {title: this.title, author: this.author,
+                cover: this.cover, description: this.description,
+                pageCount: this.pageCount, publishedDate: this.published,
+                isbn: this.isbn};
+        
     }
-}
+}// class book
 
-// Init element variables
-const $inpDivEle = $("#inputElements");
-const $inpSearchEle = $("#mainInput");
-const $btnSearchEle = $("#searchButton");
-
-const $resultsDivEle = $("#results");
-
-// Init data variables
-// Search is used when no author is given && to split into tSearch and aSearch
-let search = "";
-
-let tSearch = "Unsouled"; // Title search
-let aSearch = "Wight"; // Author / Authoress search
-
-//String responsible for letting the api know what additional search modifiers
-//Might need more than one depending on what I want to do. 
-let criteria = ""; 
-
-let searchResults = [];
 
 
 
@@ -65,7 +79,7 @@ let searchResults = [];
 //                     Listeners
 ////////////////////////////////////////////////////////////
 
-//On Search button click get the value of 
+//Main Search Listener 
 $inpDivEle.on("submit", function(event){
     event.preventDefault();
     resetResults();
@@ -78,8 +92,12 @@ $inpDivEle.on("submit", function(event){
     $inpSearchEle.val("");
     ajaxCall();
    
-}); // Event Listener Bracket
+}); // Main Search Listener
 
+// Ask why .bookDiv doesn't work
+$("#results").on("click", "button", function(event){
+    addRemoveFromSearch(this);   
+});
 
 
 ////////////////////////////////////////////////////////////
@@ -211,9 +229,14 @@ function getISBNS(data){
 //                         Results
 //---------------------------------------------------------
 
+//Recieves an array containing the book objects created from the search
 function displayResults(res){
-    res.forEach(function(book){
-        $resultsDivEle.append(book.addDataToDiv());
+    res.forEach(function(book, idx){
+        let tempBookDiv = book.addDataToDiv();
+        let tempButton = 
+            $(`<button class="listButton" id="${idx}">Add to List</button>`);
+        tempBookDiv.append(tempButton);
+        $resultsDivEle.append(tempBookDiv);
     });
 
 
@@ -226,12 +249,43 @@ function resetResults(){
     criteria = "";
     searchResults = [];
     $resultsDivEle.empty();
-}
+}//resetResults()
 
 function displayNoResults(){
     let tempEle = $("<h2 id=`resultsErrorNone`>No Results Found</h2>");
     $resultsDivEle.append(tempEle);
+}//displayNoResults()
+
+
+
+//---------------------------------------------------------
+//                         Storage
+//---------------------------------------------------------
+
+function addRemoveFromSearch(btn){
+    let idx = btn.id;
+    if($(btn).html()==="Add to List"){
+        $(btn).html("Remove");
+        $(btn).css({backgroundColor: "red"});
+        
+        searchResults[idx].inList=true;
+        saveToLocal.push(searchResults[idx].toObject());
+    }
+    else{
+        $(btn).html("Add to List");
+        $(btn).css({backgroundColor: "grey"});
+
+        //Removes the book attached to the button on the serach page
+        //from the local storage array
+        saveToLocal = saveToLocal.filter(function(ele){
+            return ele.isbn !== searchResults[idx].isbn;
+        });
+    }//else
+
+
 }
+
+
 
 
 
