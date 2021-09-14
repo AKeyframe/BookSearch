@@ -273,7 +273,7 @@ function addRemoveFromSearch(btn){
     }
     else{
         $(btn).html("Add to List");
-        $(btn).css({backgroundColor: "grey"});
+        $(btn).css({backgroundColor: "white"});
 
         //Removes the book attached to the button on the serach page
         //from the local storage array
