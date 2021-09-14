@@ -15,8 +15,27 @@ class book {
           
     }
 
-    addToPage(){
+    //Creates elements for each data point and appends them to a div
+    //All data is given a class of bookInfo
+    //The method returns the div with all the elements attached
+    addDataToDiv(){
+        let $bookDiv = $("<div class='bookDiv'>");
+        let $bookCover = $(`<img class="bookInfo" src="${this.cover}">`);
+        let $bookTitle = $(`<h2 class="bookInfo">${this.title}</h2>`);
+        let $bookAuthor = $(`<h3 class="bookInfo">By ${this.author}</h3>`);
 
+        //Might need to alter description based on length
+        let $bookDescription = $(`<p class="bookInfo">${this.description}</p>`);
+        let $bookPC = $(`<p class="bookInfo">${this.pageCount} pages</p>`);
+        let $bookPDate = $(`<p class="bookInfo">Published: ${this.published}</p>`);
+        let $bookISBN = $(`<p class ="bookInfo">${this.isbn}</p>`)
+        
+        $bookDiv.append($bookCover,
+                $bookTitle, $bookAuthor,
+                $bookDescription, $bookPC,
+                $bookPDate, $bookISBN);
+
+        return $bookDiv;
     }
 }
 
@@ -25,7 +44,7 @@ const $inpDivEle = $("#inputElements");
 const $inpSearchEle = $("#mainInput");
 const $btnSearchEle = $("#searchButton");
 
-const $resultsEle = $("#results");
+const $resultsDivEle = $("#results");
 
 // Init data variables
 // Search is used when no author is given && to split into tSearch and aSearch
@@ -91,6 +110,7 @@ function ajaxCall(){
                 console.log(data);
                 if(data.totalItems !== 0){    
                     jsonToBook(data.items);
+                    displayResults(searchResults);
                 }
                 else {
                     displayNoResults();
@@ -113,6 +133,7 @@ function ajaxCall(){
             (data) => {
                 console.log(data);
                 jsonToBook(data.items);
+                displayResults(searchResults);
             },
 
             (error) => {
@@ -148,7 +169,6 @@ function jsonToBook(data){
 
         searchResults.push(tempBook);
     }//For end
-    displayResults(searchResults);
 } //jsonToBook
 
 
@@ -191,14 +211,12 @@ function getISBNS(data){
 //                         Results
 //---------------------------------------------------------
 
-function displayResults(results){
-    for(let i=0; i<results.length; i++){
-        let $tempEle = $(`<img src="${results[i].cover}"><br><li>Title: ${results[i].title} <br> Author: ${results[i].author[0]}<br>Description: ${results[i].description}<br># Of Pages: ${results[i].pageCount}<br>Publish Date: ${results[i].published}<br>${results[i].isbn}</li>`);
-        $resultsEle.append($tempEle);
+function displayResults(res){
+    res.forEach(function(book){
+        $resultsDivEle.append(book.addDataToDiv());
+    });
 
-        //
 
-    }//For
 }// displayResults 
 
 function resetResults(){
@@ -207,12 +225,12 @@ function resetResults(){
     aSearch = "";
     criteria = "";
     searchResults = [];
-    $resultsEle.empty();
+    $resultsDivEle.empty();
 }
 
 function displayNoResults(){
     let tempEle = $("<h2 id=`resultsErrorNone`>No Results Found</h2>");
-    $resultsEle.append(tempEle);
+    $resultsDivEle.append(tempEle);
 }
 
 

@@ -9,11 +9,11 @@ main {
     align-items: center;
 }
 
-#inputFields {
+#inputFields { /* Div around the input fields */
     display: inline;
 }
 
-#mainInput {
+#mainInput { /* Search Bar */
     border: solid;
     border-radius: 20px;
     height: 30px;
@@ -25,4 +25,10 @@ main {
     border-radius: 15px;
     height: 35px;
     width: 75px;
+}
+
+.bookDiv {
+    
+    border: solid;
+    margin: 5px;
 }
