@@ -18,7 +18,7 @@ let aSearch = ""; // Author / Authoress search
 let criteria = ""; 
 
 let searchResults = [];
-let saveToLocal =[]; //Array used for local storage
+let saveToLocal = []; //Array used for local storage
 
 
 // Class decleration for easier acces of JSON data later.
@@ -72,9 +72,19 @@ class book {
     }
 }// class book
 
+console.log(document.documentURI);
 
-
-
+//If the local storage does not exist
+if(typeof(localStorage.getItem("trl"))=== "undefined"){
+    // If fresh, create the list
+    if(saveToLocal === []){
+        window.localStorage.setItem("trl", saveToLocal);
+    }
+}
+else {
+    saveToLocal = JSON.parse(window.localStorage.getItem("trl"));
+}
+console.log(saveToLocal);
 ////////////////////////////////////////////////////////////
 //                     Listeners
 ////////////////////////////////////////////////////////////
@@ -95,9 +105,12 @@ $inpDivEle.on("submit", function(event){
 }); // Main Search Listener
 
 // Ask why .bookDiv doesn't work
+//When you click an add or remove button
 $("#results").on("click", "button", function(event){
     addRemoveFromSearch(this);   
 });
+
+
 
 
 ////////////////////////////////////////////////////////////
@@ -270,6 +283,8 @@ function addRemoveFromSearch(btn){
         
         searchResults[idx].inList=true;
         saveToLocal.push(searchResults[idx].toObject());
+        window.localStorage.setItem('trl', JSON.stringify(saveToLocal));
+        console.log(saveToLocal);
     }
     else{
         $(btn).html("Add to List");
@@ -280,6 +295,8 @@ function addRemoveFromSearch(btn){
         saveToLocal = saveToLocal.filter(function(ele){
             return ele.isbn !== searchResults[idx].isbn;
         });
+        window.localStorage.setItem('trl', JSON.stringify(saveToLocal));
+        console.log(saveToLocal);
     }//else
 
 
