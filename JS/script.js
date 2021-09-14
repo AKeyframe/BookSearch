@@ -4,7 +4,6 @@ const myKey = "AIzaSyB8eDxehjMJ-G-cGeKJb0HfPK4J0owl-yk";
 const $inpDivEle = $("#inputElements");
 const $inpSearchEle = $("#mainInput");
 const $btnSearchEle = $("#searchButton");
-
 const $resultsDivEle = $("#results");
 
 // Init data variables
@@ -33,8 +32,7 @@ class book {
         this.pageCount = pageCount;
         this.published = published;
         this.isbn = isbn;
-        this.inList = false;
-          
+        this.inList = false;   
     }
 
     //Creates elements for each data point and appends them to a div
@@ -105,7 +103,7 @@ $inpDivEle.on("submit", function(event){
    
 }); // Main Search Listener
 
-// Ask why .bookDiv doesn't work
+
 //When you click an add or remove button
 $("#results").on("click", "button", function(event){
     addRemoveFromSearch(this);   
@@ -306,9 +304,7 @@ function addRemoveFromSearch(btn){
         window.localStorage.setItem('trl', JSON.stringify(saveToLocal));
         console.log(saveToLocal);
     }//else
-
-
-}
+}//addRemoveFromSearch
 
 
 
