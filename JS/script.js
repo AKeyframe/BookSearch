@@ -74,7 +74,7 @@ class book {
 
 console.log(document.documentURI);
 
-//If the local storage does not exist
+//If the local storage does not exist create it
 if(typeof(localStorage.getItem("trl"))=== "undefined"){
     // If fresh, create the list
     if(saveToLocal === []){
@@ -85,6 +85,7 @@ else {
     saveToLocal = JSON.parse(window.localStorage.getItem("trl"));
 }
 console.log(saveToLocal);
+
 ////////////////////////////////////////////////////////////
 //                     Listeners
 ////////////////////////////////////////////////////////////
@@ -111,6 +112,13 @@ $("#results").on("click", "button", function(event){
 });
 
 
+// Temp listener to clear the local storage
+$("#inputElements").on("click", "button", function(event){
+    window.localStorage.clear();
+    saveToLocal=[];
+    window.localStorage.setItem('trl', JSON.stringify(saveToLocal));
+
+});
 
 
 ////////////////////////////////////////////////////////////
