@@ -2,22 +2,38 @@ body {
     background-color: lightslategray;
 }
 
-main {
+nav {
     display: flex;
-    flex-direction:column;
-    justify-content: center;
-    align-items: center;
+    border: 2px solid;
+    border-color:seagreen;
+}
+nav > a:last-child {
+    justify-self:right;
+}
+
+header {
+    border: 2px solid;
+    border-color: mistyrose;
+}
+
+main {
+    
+    text-align: center;
+    border: 2px solid;
+    border-color: purple;
 }
 
 #inputFields { /* Div around the input fields */
     display: inline;
+    background-color: thistle;
 }
 
 #mainInput { /* Search Bar */
     border: solid;
     border-radius: 20px;
     height: 30px;
-    width: 325px;
+    width: 265px;
+    
 }
 
 #searchButton {
@@ -28,7 +44,14 @@ main {
 }
 
 .bookDiv {
-    
+    display:flex;
+    flex-wrap: wrap;
+    background-color: lightsteelblue;
     border: solid;
     margin: 5px;
+}
+
+.bookImg {
+    max-height: 135px;
+    max-width: 84px;
 }

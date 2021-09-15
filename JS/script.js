@@ -40,12 +40,21 @@ class book {
     //The method returns the div with all the elements attached
     addDataToDiv(){
         let $bookDiv = $("<div class='bookDiv'>");
-        let $bookCover = $(`<img class="bookInfo" src="${this.cover}">`);
+        let $bookCover = $(`<img class="bookImg" src="${this.cover}">`);
         let $bookTitle = $(`<h2 class="bookInfo">${this.title}</h2>`);
         let $bookAuthor = $(`<h4 class="bookInfo">By ${this.author}</h4>`);
 
-        //Might need to alter description based on length
-        let $bookDescription = $(`<p class="bookInfo">${this.description}</p>`);
+        //Shortening the description if longer than 350 characters.
+        let newDesc = this.description;
+        if(typeof this.description !== "undefined"){
+            if(this.description.length >= 300){
+                newDesc = this.description.slice(0, 300)+" ... ";
+            }
+            else{newDesc = this.description;}
+        } else{newDesc = "No Description";}
+
+
+        let $bookDescription = $(`<p class="bookInfo">${newDesc}</p>`);
         let $bookPC = $(`<p class="bookInfo">${this.pageCount} pages</p>`);
         let $bookPDate = $(`<p class="bookInfo">Published: ${this.published}</p>`);
         let $bookISBN = $(`<p class ="bookInfo">${this.isbn}</p>`)
@@ -82,7 +91,7 @@ if(typeof(localStorage.getItem("trl"))=== "undefined"){
 else {
     saveToLocal = JSON.parse(window.localStorage.getItem("trl"));
 }
-console.log(saveToLocal);
+console.log("Local Storage: "+saveToLocal);
 
 ////////////////////////////////////////////////////////////
 //                     Listeners
@@ -290,7 +299,7 @@ function addRemoveFromSearch(btn){
         searchResults[idx].inList=true;
         saveToLocal.push(searchResults[idx].toObject());
         window.localStorage.setItem('trl', JSON.stringify(saveToLocal));
-        console.log(saveToLocal);
+        console.log("Local Storage: "+saveToLocal);
     }
     else{
         $(btn).html("Add to List");
@@ -302,7 +311,7 @@ function addRemoveFromSearch(btn){
             return ele.isbn !== searchResults[idx].isbn;
         });
         window.localStorage.setItem('trl', JSON.stringify(saveToLocal));
-        console.log(saveToLocal);
+        console.log("Local Storage: "+saveToLocal);
     }//else
 }//addRemoveFromSearch
 
