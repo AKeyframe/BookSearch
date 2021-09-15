@@ -24,7 +24,9 @@ let saveToLocal = []; //Array used for local storage
 //constructor funtion supplies the paramters
  //every time a new book is created. 
 class book {
-    constructor(title, author, cover, description, pageCount, published, isbn){
+    constructor(title, author, cover,
+                description, pageCount,
+                published, isbn){
         this.title = title;
         this.author = author;
         this.cover = cover;
@@ -40,29 +42,31 @@ class book {
     //The method returns the div with all the elements attached
     addDataToDiv(){
         let $bookDiv = $("<div class='bookDiv'>");
+        let $bookInfoDiv = $("<div class='bookInfoDiv'>");
         let $bookCover = $(`<img class="bookImg" src="${this.cover}">`);
         let $bookTitle = $(`<h2 class="bookInfo">${this.title}</h2>`);
         let $bookAuthor = $(`<h4 class="bookInfo">By ${this.author}</h4>`);
 
         //Shortening the description if longer than 350 characters.
-        let newDesc = this.description;
+        let newDesc = "<strong>Description: </strong>"+this.description;
         if(typeof this.description !== "undefined"){
             if(this.description.length >= 300){
-                newDesc = this.description.slice(0, 300)+" ... ";
+                newDesc = "<strong>Description: </strong>"+this.description.slice(0, 300)+" ... ";
             }
-            else{newDesc = this.description;}
+            else{newDesc = "<strong>Description: </strong>"+this.description;}
         } else{newDesc = "No Description";}
 
 
         let $bookDescription = $(`<p class="bookInfo">${newDesc}</p>`);
         let $bookPC = $(`<p class="bookInfo">${this.pageCount} pages</p>`);
-        let $bookPDate = $(`<p class="bookInfo">Published: ${this.published}</p>`);
+        let $bookPDate = $(`<smaller><p class="bookInfo">Published: ${this.published}</p></smaller>`);
         let $bookISBN = $(`<p class ="bookInfo">${this.isbn}</p>`)
         
-        $bookDiv.append($bookCover,
-                $bookTitle, $bookAuthor,
+        $bookInfoDiv.append($bookTitle, $bookAuthor,
                 $bookDescription, $bookPC,
                 $bookPDate, $bookISBN);
+
+        $bookDiv.append($bookCover, $bookInfoDiv);
 
         return $bookDiv;
     }//addDataToDiv()
@@ -79,7 +83,7 @@ class book {
     }
 }// class book
 
-console.log(document.documentURI);
+
 
 //If the local storage does not exist create it
 if(typeof(localStorage.getItem("trl"))=== "undefined"){

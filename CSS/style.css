@@ -4,12 +4,12 @@ body {
 
 nav {
     display: flex;
+    justify-content: space-between;
+    
     border: 2px solid;
     border-color:seagreen;
 }
-nav > a:last-child {
-    justify-self:right;
-}
+
 
 header {
     border: 2px solid;
@@ -17,15 +17,18 @@ header {
 }
 
 main {
-    
     text-align: center;
     border: 2px solid;
     border-color: purple;
+}
+#results {
+    
 }
 
 #inputFields { /* Div around the input fields */
     display: inline;
     background-color: thistle;
+   
 }
 
 #mainInput { /* Search Bar */
@@ -43,15 +46,40 @@ main {
     width: 75px;
 }
 
+/* Inside the book Div */
 .bookDiv {
-    display:flex;
-    flex-wrap: wrap;
+    display:grid;
+    grid-template-columns: 1fr 3fr;
+    grid-template-rows: 1fr;
+    grid-template-areas: 
+        "img info";
     background-color: lightsteelblue;
+    text-align:left;
     border: solid;
-    margin: 5px;
+    margin: 5px auto;
+    max-width: 365px;
+    
 }
 
+h2.bookInfo { font-size: 20px; margin: 8px 1px 2px 1px}
+h4.bookInfo { font-size: 14px; margin: 1px 1px 3px 1px}
+p.bookInfo {font-size: 10px; margin: 1px;}
+
 .bookImg {
-    max-height: 135px;
-    max-width: 84px;
+    margin: 10px 5px 5px 5px;
+    height: 135px;
+    width: 84px;
+    grid-area: img;
+}
+
+
+
+
+
+#listButton {
+   
+}
+
+@media only screen and (min-width: 768px) {
+   
 }
