@@ -43,6 +43,7 @@ class book {
     addDataToDiv(){
         let $bookDiv = $("<div class='bookDiv'>");
         let $bookInfoDiv = $("<div class='bookInfoDiv'>");
+        let $bookCoverDiv = $("<div class='bookCoverDiv'>");
         let $bookCover = $(`<img class="bookImg" src="${this.cover}">`);
         let $bookTitle = $(`<h2 class="bookInfo">${this.title}</h2>`);
         let $bookAuthor = $(`<h4 class="bookInfo">By ${this.author}</h4>`);
@@ -59,14 +60,16 @@ class book {
 
         let $bookDescription = $(`<p class="bookInfo">${newDesc}</p>`);
         let $bookPC = $(`<p class="bookInfo">${this.pageCount} pages</p>`);
-        let $bookPDate = $(`<smaller><p class="bookInfo">Published: ${this.published}</p></smaller>`);
+        let $bookPDate = $(`<p class="bookInfo">Published: ${this.published}</p>`);
         let $bookISBN = $(`<p class ="bookInfo">${this.isbn}</p>`)
         
         $bookInfoDiv.append($bookTitle, $bookAuthor,
                 $bookDescription, $bookPC,
                 $bookPDate, $bookISBN);
 
-        $bookDiv.append($bookCover, $bookInfoDiv);
+        $bookCoverDiv.append($bookCover);
+
+        $bookDiv.append($bookCoverDiv, $bookInfoDiv);
 
         return $bookDiv;
     }//addDataToDiv()
@@ -267,7 +270,8 @@ function displayResults(res){
         let tempBookDiv = book.addDataToDiv();
         let tempButton = 
             $(`<button class="listButton" id="${idx}">Add to List</button>`);
-        tempBookDiv.append(tempButton);
+
+        tempBookDiv.children(".bookCoverDiv").append(tempButton);
         $resultsDivEle.append(tempBookDiv);
     });
 

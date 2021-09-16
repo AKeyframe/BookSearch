@@ -5,15 +5,26 @@ body {
 nav {
     display: flex;
     justify-content: space-between;
-    
     border: 2px solid;
     border-color:seagreen;
 }
 
+nav > a:link, nav > a:visited{
+    font-size: 24px;
+    text-decoration: none;
+    background-color: black;
+    color: white;
+}
+nav > a:hover, nav > a:active {
+    background-color: red;
+  }
+
 
 header {
+    text-align:center;
     border: 2px solid;
     border-color: mistyrose;
+    
 }
 
 main {
@@ -25,17 +36,20 @@ main {
     
 }
 
+#inputElements {
+    margin: 0 auto;
+}
+
 #inputFields { /* Div around the input fields */
-    display: inline;
-    background-color: thistle;
-   
+    margin: 0 auto;
 }
 
 #mainInput { /* Search Bar */
+    outline: none;
     border: solid;
     border-radius: 20px;
     height: 30px;
-    width: 265px;
+    width: 255px;
     
 }
 
@@ -44,6 +58,9 @@ main {
     border-radius: 15px;
     height: 35px;
     width: 75px;
+}
+#searchButton:hover {
+    background-color:skyblue;
 }
 
 /* Inside the book Div */
@@ -76,8 +93,9 @@ p.bookInfo {font-size: 10px; margin: 1px;}
 
 
 
-#listButton {
-   
+.listButton {
+   width: 80px;
+   margin: 0px 0px 10px 7px;
 }
 
 @media only screen and (min-width: 768px) {
