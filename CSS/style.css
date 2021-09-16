@@ -1,36 +1,70 @@
-body {
-    background-color: lightslategray;
+html, body {
+    margin: 0;
+    padding: 0;
+
+    background-color: black;
 }
+body {
+    height: 100vh;
+}
+
+h1 {
+    color:#dbcba9;
+    font-size: 50px;
+    margin: 50px 0px 25px 0px;
+}
+
+header {
+    display: flex;
+    flex-direction: column;
+    text-align:center;
+    
+
+    /* border: 2px solid;
+    border-color: mistyrose; */
+    background-image: linear-gradient(rgba(0, 0, 0, 0.20), rgba(0, 0, 0, 0.20)), url(/Images/background/golden-book.jpg);
+    background-size: 400px 400px;
+    
+    background-position: left;
+    /*  no-repeat*/
+}
+
 
 nav {
     display: flex;
-    justify-content: space-between;
-    border: 2px solid;
-    border-color:seagreen;
+    justify-content: space-evenly;
+    background-color: rgba(0,0,0,0.65);
+    margin: 20vh 0px 0px 0px;
+    
+
+}
+
+nav > a {
+    font-size: 24px;
+    color: #dbcba9;
+    padding: 5px;
 }
 
 nav > a:link, nav > a:visited{
-    font-size: 24px;
+   
     text-decoration: none;
-    background-color: black;
-    color: white;
+   
+    
 }
 nav > a:hover, nav > a:active {
-    background-color: red;
+   
   }
 
 
-header {
-    text-align:center;
-    border: 2px solid;
-    border-color: mistyrose;
-    
-}
+
 
 main {
     text-align: center;
-    border: 2px solid;
-    border-color: purple;
+   
+    /* border: 2px solid; */
+    /* border-color: purple; */
+
+    
 }
 #results {
     
@@ -50,12 +84,24 @@ main {
     border-radius: 20px;
     height: 30px;
     width: 255px;
-    
+    color: #dbcba9;
+    font-size: 20px;
+    padding-left: 15px;
+    background: transparent;
+   
+}
+
+::placeholder {
+    color: #dbcba9;
 }
 
 #searchButton {
-    border: solid black;
+    border: solid #dbcba9;
     border-radius: 15px;
+    outline: none;
+    background: transparent;
+    color: #dbcba9;
+    font-size: 20px;
     height: 35px;
     width: 75px;
 }
@@ -70,14 +116,15 @@ main {
     grid-template-rows: 1fr;
     grid-template-areas: 
         "img info";
-    background-color: lightsteelblue;
+   
     text-align:left;
-    border: solid;
-    margin: 5px auto;
+    margin: 20px auto;
     max-width: 365px;
+
+    border-radius: 2%;
     
 }
-
+.bookInfo {color: #dbcba9;}
 h2.bookInfo { font-size: 20px; margin: 8px 1px 2px 1px}
 h4.bookInfo { font-size: 14px; margin: 1px 1px 3px 1px}
 p.bookInfo {font-size: 10px; margin: 1px;}
@@ -86,16 +133,36 @@ p.bookInfo {font-size: 10px; margin: 1px;}
     margin: 10px 5px 5px 5px;
     height: 135px;
     width: 84px;
+    border: solid #dbcba9;
     grid-area: img;
 }
-
-
-
 
 
 .listButton {
    width: 80px;
    margin: 0px 0px 10px 7px;
+   background:transparent;
+   border: solid #dbcba9;
+   color: #dbcba9;
+   border-radius: 15px;
+   
+}
+.listButton:hover, .listButton:active{
+
+}
+
+footer {
+    background-color: black;
+    color: #dbcba9;
+    /* position: fixed;
+    bottom: 0;
+    left: 0;
+    right: 0; */
+   
+    
+}
+footer > p {
+    margin-bottom: 0px;
 }
 
 @media only screen and (min-width: 768px) {

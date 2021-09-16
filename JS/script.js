@@ -98,7 +98,7 @@ if(typeof(localStorage.getItem("trl"))=== "undefined"){
 else {
     saveToLocal = JSON.parse(window.localStorage.getItem("trl"));
 }
-console.log("Local Storage: "+saveToLocal);
+console.log(saveToLocal);
 
 ////////////////////////////////////////////////////////////
 //                     Listeners
@@ -202,6 +202,10 @@ function ajaxCall(){
 
 function jsonToBook(data){
     let defaultCoverImage = "/Images/noImageThumbnail.jpg";
+
+    if(typeof data === "undefined"){
+        return;
+    }
 
     for(let i=0; i<data.length; i++){
         let isbns = getISBNS(data[i].volumeInfo.industryIdentifiers);
@@ -307,11 +311,11 @@ function addRemoveFromSearch(btn){
         searchResults[idx].inList=true;
         saveToLocal.push(searchResults[idx].toObject());
         window.localStorage.setItem('trl', JSON.stringify(saveToLocal));
-        console.log("Local Storage: "+saveToLocal);
+        console.log(saveToLocal);
     }
     else{
         $(btn).html("Add to List");
-        $(btn).css({backgroundColor: "white"});
+        $(btn).css({background: "transparent"});
 
         //Removes the book attached to the button on the serach page
         //from the local storage array
@@ -319,7 +323,7 @@ function addRemoveFromSearch(btn){
             return ele.isbn !== searchResults[idx].isbn;
         });
         window.localStorage.setItem('trl', JSON.stringify(saveToLocal));
-        console.log("Local Storage: "+saveToLocal);
+        console.log(saveToLocal);
     }//else
 }//addRemoveFromSearch
 
