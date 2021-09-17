@@ -14,6 +14,10 @@ h1 {
     margin: 50px 0px 25px 0px;
 }
 
+#listHeading{
+    margin-top: 75px;
+}
+
 header {
     display: flex;
     flex-direction: column;
@@ -24,7 +28,6 @@ header {
     border-color: mistyrose; */
     background-image: linear-gradient(rgba(0, 0, 0, 0.20), rgba(0, 0, 0, 0.20)), url(/Images/background/golden-book.jpg);
     background-size: cover;
-    
     background-position: left;
     
     /*  no-repeat*/
@@ -36,8 +39,11 @@ nav {
     justify-content: space-evenly;
     background-color: rgba(0,0,0,0.65);
     margin: 20vh 0px 0px 0px;
-    
+}
 
+#subNav {
+    margin-top: 60px;
+   
 }
 
 nav > a {
@@ -61,17 +67,27 @@ nav > a:link, nav > a:visited{
 
 
 main {
-    text-align: center;
-   
-    /* border: 2px solid; */
-    /* border-color: purple; */
-
-    
+    text-align: center;    
 }
-/* 
+
+#listOptions {
+    color: #dbcba9;
+    text-align: center;
+    padding: 25px;
+}
+
+#listNames {
+    color: #dbcba9;
+    text-decoration: none;
+    font-size: 20px;
+    margin: 15px;
+}
+
+
+
 #results {
-    
-} */
+    color: #dbcba9;
+}
 
 #inputElements {
     margin: 0 auto;
@@ -150,6 +166,12 @@ p.bookInfo {font-size: 10px; margin: 1px;}
    color: #dbcba9;
    border-radius: 15px;
    
+}
+
+#resultsErrorNone {
+    color: #dbcba9;
+    text-align: center;
+    margin-top: 50px;
 }
 
 /* .listButton:hover, .listButton:active{

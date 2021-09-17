@@ -6,6 +6,11 @@ const $inpSearchEle = $("#mainInput");
 const $btnSearchEle = $("#searchButton");
 const $resultsDivEle = $("#results");
 
+
+//Init elements for html/lists.html
+const $subNavEle = $("#subNav");
+const $listOptionsEle = $("#listOptions");
+
 // Init data variables
 // Search is used when no author is given && to split into tSearch and aSearch
 let search = "";
@@ -18,6 +23,10 @@ let criteria = "";
 
 let searchResults = [];
 let saveToLocal = []; //Array used for local storage
+
+let defaultList= []; //the default list
+let userLists = [{name: "My TLR", array: defaultList}]; //Array of objs storing the users created lists
+let currentList = []; // Used for storing the current lists book data
 
 
 // Class decleration for easier acces of JSON data later.
@@ -87,19 +96,19 @@ class book {
 }// class book
 
 
-
-//If the local storage does not exist create it
-if(typeof(localStorage.getItem("trl"))=== "undefined"){
-    // If fresh, create the list
-    if(saveToLocal === []){
-        window.localStorage.setItem("trl", saveToLocal);
-    }
-}
-else {
-    saveToLocal = JSON.parse(window.localStorage.getItem("trl"));
-}
-console.log(saveToLocal);
-
+// if(typeof(localStorage.getItem("trl"))=== "undefined"){
+//     // If fresh, create the list
+//     if(saveToLocal === []){
+//         window.localStorage.setItem("trl", saveToLocal);
+//     }
+// }
+// else {
+//     saveToLocal = JSON.parse(window.localStorage.getItem("trl"));
+// }
+// console.log(saveToLocal);
+console.log('before check');
+console.log(userLists);
+checkLocal();
 
 ////////////////////////////////////////////////////////////
 //                     Listeners
@@ -142,9 +151,85 @@ window.addEventListener('resize', function(event){
 $("#inputElements").on("click", "button", function(event){
     window.localStorage.clear();
     saveToLocal=[];
-    window.localStorage.setItem('trl', JSON.stringify(saveToLocal));
+    defaultList=[];
+    userLists=[{name: "My TLR", array: defaultList}];
+    window.localStorage.setItem('trl', JSON.stringify(defaultList));
 
 });
+
+
+//---------------------------------------------------------
+//                   HTML/lists.html
+//---------------------------------------------------------
+
+
+$subNavEle.on("click", "a", function(event){
+    console.log(event.target);
+
+//---------------------Create List-------------------------    
+    if(event.target.id === "createList"){
+        $listOptionsEle.empty();
+        let listInputDiv = $(`<div id=listInput>
+                            <form><p>List Name:
+                                <input id="newListInput" type="text">
+                                <input id="newListButton" type="submit"> </p>`);
+        
+        $listOptionsEle.append(listInputDiv);
+
+//New List Name Event Listener
+        $listOptionsEle.on("submit", function(optEvent){
+            optEvent.preventDefault();
+            $resultsDivEle.empty();
+            let $inputVal = $('#newListInput').val();
+            
+            //check to see if the list already exists
+            let bool = false;
+            userLists.forEach(function(list){
+                console.log(list.name);
+                console.log($inputVal);
+                if(list.name === $inputVal){
+                    console.log("yess");
+                    bool=true;
+                    $resultsDivEle.append($('<p>This list already exits please create another</p>'));
+                }
+            });
+            
+            //If it exits stop
+            if(bool === true){return;}
+
+            //Create the List obj and add to LS and userLists
+            let tempArray =[];
+            let tempObj = {name: $inputVal, array: tempArray};
+           
+            userLists.push({name: $inputVal, array: tempArray});
+            window.localStorage.setItem(`${$inputVal}`, JSON.stringify(tempObj));
+            console.log("during event");
+            console.log(userLists);
+            console.log(localStorage);
+
+
+
+        });//New List Input Event listener
+    }//If Create List 
+
+//---------------------My List-------------------------   
+    if(event.target.id === "aMyLists"){
+        $listOptionsEle.empty();
+        //Display Every list
+        userLists.forEach(function(list){
+            let $tempH3 = $(`<a id="listNames" href="#">${list.name}<a>`);
+            $listOptionsEle.append($tempH3);
+        });
+
+        $listOptionsEle.on("click", "a", function(aEvent){
+            if(aEvent.target.textContent === "My TLR"){
+                displayResults(defaultList);
+            }
+        });
+
+    }// If My Lists
+
+});//$subNavEle event listener
 
 
 ////////////////////////////////////////////////////////////
@@ -343,7 +428,7 @@ function resetResults(){
 }//resetResults()
 
 function displayNoResults(){
-    let tempEle = $("<h2 id=`resultsErrorNone`>No Results Found</h2>");
+    let tempEle = $("<h2 id='resultsErrorNone'>No Results Found</h2>");
     $resultsDivEle.append(tempEle);
 }//displayNoResults()
 
@@ -353,6 +438,30 @@ function displayNoResults(){
 //                         Storage
 //---------------------------------------------------------
 
+function checkLocal(){
+//If the local storage does not exist create it
+    //To Read List
+    if(typeof(localStorage.getItem("trl"))=== "undefined"){
+        // If fresh, create the list
+        defaultList = [];
+        window.localStorage.setItem("trl", defaultList);
+        
+    }
+    else {
+        defaultList = JSON.parse(window.localStorage.getItem("trl"));
+    }
+    console.log(defaultList);
+
+    // User Lists
+    for(let i =1; i< localStorage.length; i++){
+            userLists.push(JSON.parse(window.localStorage.getItem(
+                localStorage.key(i))));
+        }
+    console.log("after check");
+    console.log(userLists);
+    console.log(localStorage);
+} // checkLocal()
+
 function addRemoveFromSearch(btn){
     let idx = btn.id;
     if($(btn).html()==="Add to List"){
@@ -360,9 +469,9 @@ function addRemoveFromSearch(btn){
         $(btn).css({backgroundColor: "red"});
         
         searchResults[idx].inList=true;
-        saveToLocal.push(searchResults[idx].toObject());
-        window.localStorage.setItem('trl', JSON.stringify(saveToLocal));
-        console.log(saveToLocal);
+        defaultList.push(searchResults[idx].toObject());
+        window.localStorage.setItem('trl', JSON.stringify(defaultList));
+        console.log(defaultList);
     }
     else{
         $(btn).html("Add to List");
@@ -370,15 +479,22 @@ function addRemoveFromSearch(btn){
 
         //Removes the book attached to the button on the serach page
         //from the local storage array
-        saveToLocal = saveToLocal.filter(function(ele){
+        defaultList = defaultList.filter(function(ele){
             return ele.isbn !== searchResults[idx].isbn;
         });
-        window.localStorage.setItem('trl', JSON.stringify(saveToLocal));
-        console.log(saveToLocal);
+        window.localStorage.setItem('trl', JSON.stringify(defaultList));
+        console.log(defaultList);
     }//else
 }//addRemoveFromSearch
 
-
+function objectToBook(list){
+    list.forEach(function(obj){
+        let tempBook = new book (obj.title, obj.author, obj.cover,
+                                 obj.description, obj.pageCount, obj.publishedDate, obj.isbn);
+    
+        currentList.push(tempBook);
+    });
+}
 
 
 
