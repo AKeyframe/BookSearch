@@ -23,9 +23,10 @@ header {
     /* border: 2px solid;
     border-color: mistyrose; */
     background-image: linear-gradient(rgba(0, 0, 0, 0.20), rgba(0, 0, 0, 0.20)), url(/Images/background/golden-book.jpg);
-    background-size: 400px 400px;
+    background-size: cover;
     
     background-position: left;
+    
     /*  no-repeat*/
 }
 
@@ -51,9 +52,10 @@ nav > a:link, nav > a:visited{
    
     
 }
-nav > a:hover, nav > a:active {
+
+/* nav > a:hover, nav > a:active {
    
-  }
+  } */
 
 
 
@@ -66,9 +68,10 @@ main {
 
     
 }
+/* 
 #results {
     
-}
+} */
 
 #inputElements {
     margin: 0 auto;
@@ -83,7 +86,7 @@ main {
     border: solid;
     border-radius: 20px;
     height: 30px;
-    width: 255px;
+    width: 245px;
     color: #dbcba9;
     font-size: 20px;
     padding-left: 15px;
@@ -108,6 +111,7 @@ main {
 #searchButton:hover {
     background-color:skyblue;
 }
+
 
 /* Inside the book Div */
 .bookDiv {
@@ -147,24 +151,65 @@ p.bookInfo {font-size: 10px; margin: 1px;}
    border-radius: 15px;
    
 }
-.listButton:hover, .listButton:active{
 
-}
+/* .listButton:hover, .listButton:active{
+
+} */
 
 footer {
     background-color: black;
     color: #dbcba9;
-    /* position: fixed;
-    bottom: 0;
-    left: 0;
-    right: 0; */
-   
-    
-}
-footer > p {
-    margin-bottom: 0px;
+    text-align: center;
+    font-size: 11px;
+ 
 }
 
-@media only screen and (min-width: 768px) {
+footer > p {
+    margin-bottom: 0px;
+    margin-top: 0px;
    
+}
+
+footer > a, footer > a:link, footer > a:visited{
+    font-size: 11px;
+   
+    text-decoration: none;
+    color: #dbcba9;
+}
+footer > img {
+    margin-top: 75px;
+}
+
+
+@media only screen and (min-width: 500px){
+    header {
+
+        background-size:cover;
+        background-position-y: -130px;
+        
+    }
+}
+
+
+@media only screen and (min-width: 780px) {
+    .bookDivsDiv {
+        display: flex;
+     }
+}
+
+@media only screen and (min-width: 950px){
+    header {
+        background-size: cover;
+        
+        
+    }
+
+    .bookDivsDiv {
+        display: flex;
+        justify-content: center;
+     }
+
+    .bookDiv {
+        margin: 20px 40px;
+    }
 }

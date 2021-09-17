@@ -100,6 +100,7 @@ else {
 }
 console.log(saveToLocal);
 
+
 ////////////////////////////////////////////////////////////
 //                     Listeners
 ////////////////////////////////////////////////////////////
@@ -123,6 +124,17 @@ $inpDivEle.on("submit", function(event){
 //When you click an add or remove button
 $("#results").on("click", "button", function(event){
     addRemoveFromSearch(this);   
+});
+
+window.addEventListener('resize', function(event){
+    if(!$resultsDivEle.is(':empty')){
+        if(window.innerWidth >= 780){
+            largeDisplayResults(searchResults);
+        }
+        else{
+            displayResults(searchResults);
+        }
+    }
 });
 
 
@@ -163,7 +175,14 @@ function ajaxCall(){
                 console.log(data);
                 if(data.totalItems !== 0){    
                     jsonToBook(data.items);
-                    displayResults(searchResults);
+                    
+                    if(window.innerWidth < 780){    
+                        displayResults(searchResults);
+                    }
+                    else {
+                        largeDisplayResults(searchResults);
+                    }
+
                 }
                 else {
                     displayNoResults();
@@ -185,14 +204,21 @@ function ajaxCall(){
         promise.then(
             (data) => {
                 console.log(data);
-                jsonToBook(data.items);
-                displayResults(searchResults);
-            },
+                if(data.totalItems !== 0){    
+                    jsonToBook(data.items);
+                    
+                    if(window.innerWidth < 780){    
+                        displayResults(searchResults);
+                    }
+                    else {
+                        largeDisplayResults(searchResults);
+                    }
 
-            (error) => {
-                console.log('bad request: ', error);
-            }
-        ); // .then() 
+                }
+                else {
+                    displayNoResults();
+                }
+            }); // .then() 
 
     }// Else
     
@@ -270,17 +296,42 @@ function getISBNS(data){
 
 //Recieves an array containing the book objects created from the search
 function displayResults(res){
+        $('.bookDivsDiv').remove();
+        $resultsDivEle.empty();
+        res.forEach(function(book, idx){
+            let tempBookDiv = book.addDataToDiv();
+            let tempButton = 
+                $(`<button class="listButton" id="${idx}">Add to List</button>`);
+
+            tempBookDiv.children(".bookCoverDiv").append(tempButton);
+            $resultsDivEle.append(tempBookDiv);
+        });
+    
+}// displayResults 
+
+function largeDisplayResults(res){
+    $('.bookDivsDiv').remove();
+    $resultsDivEle.empty();
+    let i=1;
+    let $bookDivsDiv = $("<div class='bookDivsDiv'>");
     res.forEach(function(book, idx){
         let tempBookDiv = book.addDataToDiv();
         let tempButton = 
             $(`<button class="listButton" id="${idx}">Add to List</button>`);
 
         tempBookDiv.children(".bookCoverDiv").append(tempButton);
-        $resultsDivEle.append(tempBookDiv);
+        $bookDivsDiv.append(tempBookDiv);
+        if(i===2){
+            i=1;
+            $resultsDivEle.append($bookDivsDiv);
+            $bookDivsDiv = $("<div class='bookDivsDiv'>");
+        }
+        else{
+            i++;
+        }
     });
+}
 
-
-}// displayResults 
 
 function resetResults(){
     search = "";
