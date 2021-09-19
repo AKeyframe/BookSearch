@@ -12,10 +12,13 @@ h1 {
     color:#dbcba9;
     font-size: 50px;
     margin: 50px 0px 25px 0px;
+    text-shadow: black 5px 3px;
 }
 
 #listHeading{
-    margin-top: 75px;
+    margin-top: 70px;
+    margin-bottom: 45px;
+   
 }
 
 header {
@@ -90,6 +93,16 @@ a {
     
 }
 
+a.navLinks {
+    padding: 0px;
+    margin: 5px;
+}
+
+a.dropLinks {
+    padding: 5px;
+    margin: 5px;
+}
+
 #listOptions {
     padding: 0px;
     margin: 15px;
@@ -107,7 +120,7 @@ a {
     margin: 0 auto;
 }
 
-#mainInput { /* Search Bar */
+#mainInput, #newListInput { /* Search Bar */
     outline: none;
     border: solid;
     border-radius: 20px;
@@ -120,22 +133,39 @@ a {
    
 }
 
+#newListInput {
+    height: 20px;
+    width: 175px;
+    margin-left: 5px;
+}
+
 ::placeholder {
     color: #dbcba9;
 }
 
-#searchButton {
+#searchButton, #newListButton {
     border: solid #dbcba9;
     border-radius: 15px;
     outline: none;
-    background: transparent;
+    background: black;
     color: #dbcba9;
     font-size: 20px;
     height: 35px;
     width: 75px;
+    padding: 1px;
 }
-#searchButton:hover {
-    background-color:skyblue;
+
+#newListButton {
+    height: 22px;
+    width: 60px;
+    font-size: 14px;
+   
+    
+}
+
+#searchButton:hover, #newListButton:hover {
+    background-color:#dbcba9;
+    color: black;
 }
 
 
@@ -173,7 +203,7 @@ p.bookInfo {font-size: 10px; margin: 1px;}
     margin: 20px auto;
 }
 
-.listButton {
+.listButton, .removeButton {
    width: 80px;
    margin: 0px 0px 10px 7px;
    background:transparent;
@@ -182,6 +212,52 @@ p.bookInfo {font-size: 10px; margin: 1px;}
    border-radius: 15px;
    
 }
+
+.listButton:hover, .listButton:focus, .removeButton:hover, .removeButton:focus {
+    background-color: #dbcba9;
+    border-color: black;
+    color:black;
+  }
+  
+  /* outer div */
+  .dropdown {
+    position: relative;
+    display: inline-block;
+  }
+  
+  /* Dropdown Content (Hidden by Default) */
+  .dropdown-content {
+    display: none;
+    position: absolute;
+    background-color: black;
+    border: solid #dbcba9;
+    border-radius: 15px;
+    min-width: 160px;
+    box-shadow: 0px 8px 16px 0px rgba(0,0,0,0.2);
+    z-index: 1;
+  }
+  
+  /* inner div */
+  .dropdown-content a {
+    color: #dbcba9;
+    border: solid #dbcba9 1px;
+    border-radius: 15px;
+    padding: 12px 16px;
+    text-decoration: none;
+    display: block;
+  }
+  
+  /*color of dropdown links on hover */
+  .dropdown-content a:hover {
+      background-color: #dbcba9;
+      border-color: black;
+      color:black;
+    }
+  
+  /* Show the dropdown menu */
+  .show {display:block;}
+
+
 
 #resultsErrorNone {
     color: #dbcba9;
@@ -216,60 +292,6 @@ footer > a, footer > a:link, footer > a:visited{
 footer > img {
     margin-top: 75px;
 }
-
-
-
-
-
-
-
-.listButton:hover, .listButton:focus {
-    background-color: #2980B9;
-  }
-  
-  /* outer div */
-  .dropdown {
-    position: relative;
-    display: inline-block;
-  }
-  
-  /* Dropdown Content (Hidden by Default) */
-  .dropdown-content {
-    display: none;
-    position: absolute;
-    background-color: black;
-    border: solid #dbcba9;
-    border-radius: 15px;
-    min-width: 160px;
-    box-shadow: 0px 8px 16px 0px rgba(0,0,0,0.2);
-    z-index: 1;
-  }
-  
-  /* inner div */
-  .dropdown-content a {
-    color: #dbcba9;
-    border: solid #dbcba9 1px;
-    border-radius: 15px;
-    padding: 12px 16px;
-    text-decoration: none;
-    display: block;
-  }
-  
-  /* Change color of dropdown links on hover */
-  .dropdown-content a:hover {background-color: #8d6237}
-  
-  /* Show the dropdown menu */
-  .show {display:block;}
-
-  a.dropLinks {
-      padding: 5px;
-      margin: 5px;
-  }
-
-
-
-
-
 
 
 
