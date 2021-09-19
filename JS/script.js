@@ -25,7 +25,7 @@ let searchResults = [];
 let saveToLocal = []; //Array used for local storage
 
 let defaultList= []; //the default list
-let userLists = [{name: "My TLR", array: defaultList}]; //Array of objs storing the users created lists
+let userLists = [{name: "Reading List", array: defaultList}]; //Array of objs storing the users created lists
 let currentList; // Used for storing the current list being displayed
 
 
@@ -120,11 +120,13 @@ $inpDivEle.on("submit", function(event){
 //When you click an add or remove button
 $("#results").on("click", "button", function(btn){
         console.log(btn.target);
+        //If not a remove button - display dropdown
         if(!btn.target.classList.contains("removeButton")){
             let divEle = btn.target.id+"Div";
        
             document.getElementById(divEle).classList.toggle("show");
         }
+//------------------------Remove from List----------------------
         else {
             let remIdx;
             userLists.forEach(function(obj, i){
@@ -132,9 +134,22 @@ $("#results").on("click", "button", function(btn){
                     remIdx=i;
                 }
             });
-            console.log(searchResults);
+            
             userLists[remIdx].array.splice(btn.target.id, 1);
-            console.log(searchResults);
+            
+
+            let tempList = userLists[remIdx];
+            let tempObj = {name: tempList.name, array: tempList.array}
+            window.localStorage.setItem(tempList.name, JSON.stringify(tempObj));
+            
+            if(window.innerWidth < 780){
+
+            }
+            else {
+                let tempBookList = objectToBook(userLists[0].array);
+                largeDisplayList(tempBookList);
+            }
+
         }
 
     // Close the dropdown menu if the user clicks outside of it
@@ -190,8 +205,8 @@ $("#inputElements").on("click", "button", function(event){
     window.localStorage.clear();
     saveToLocal=[];
     defaultList=[];
-    userLists=[{name: "My TLR", array: defaultList}];
-    window.localStorage.setItem('trl', JSON.stringify(defaultList));
+    userLists=[{name: "Reading List", array: defaultList}];
+    window.localStorage.setItem('Reading List', JSON.stringify(userLists[0]));
 
 });
 
@@ -242,7 +257,7 @@ $subNavEle.on("click", "a", function(event){
         });//New List Input Event listener
     }//If Create List 
 
-//---------------------My List-------------------------   
+//----------------------------My List-----------------------------   
     if(event.target.id === "aMyLists"){
         $listOptionsEle.empty();
         //Display Every list
@@ -252,11 +267,11 @@ $subNavEle.on("click", "a", function(event){
         });
 
         $listOptionsEle.on("click", "a", function(aEvent){
-            if(aEvent.target.textContent === "My TLR"){
+            if(aEvent.target.textContent === "Reading List"){
                 let tempList = objectToBook(userLists[0].array);
                 console.log(tempList);
                 largeDisplayList(tempList);
-                currentList="trl";
+                currentList="Reading List";
             }
         });
 
@@ -528,14 +543,14 @@ function displayNoResults(){
 function checkLocal(){
 //If the local storage does not exist create it
     //To Read List
-    if(typeof(localStorage.getItem("trl"))=== "undefined"){
+    if(typeof(localStorage.getItem("Reading List"))=== "undefined"){
         // If fresh, create the list
-        defaultList = [];
-        window.localStorage.setItem("trl", defaultList);
+        userLists[0]={name: "Reading List", array: defaultList};
+        window.localStorage.setItem("Reading List", JSON.stringify(userLists[0]));
         
     }
     else {
-        userLists[0] = JSON.parse(window.localStorage.getItem("trl"));
+        userLists[0] = JSON.parse(window.localStorage.getItem("Reading List"));
     }
 
     // User Lists
@@ -558,13 +573,12 @@ function addRemoveFromLists(idx, listName, listIdx){
 
     list.array.push(searchResults[idx].toObject());
     console.log(list.array);
-    if(listName === "My TLR"){ listName="trl";}
+    if(listName === "Reading List"){ listName="Reading List";}
     console.log(listName);
     window.localStorage.setItem(listName, JSON.stringify(tempObj));
 
 
     
-   
    
 
     // if($(btn).html()==="Add to List"){
@@ -573,7 +587,7 @@ function addRemoveFromLists(idx, listName, listIdx){
         
     //     searchResults[idx].inList=true;
     //     defaultList.push(searchResults[idx].toObject());
-    //     window.localStorage.setItem('trl', JSON.stringify(defaultList));
+    //     window.localStorage.setItem('Reading List', JSON.stringify(defaultList));
     //     console.log(defaultList);
     // }
     // else{
@@ -585,7 +599,7 @@ function addRemoveFromLists(idx, listName, listIdx){
     //     defaultList = defaultList.filter(function(ele){
     //         return ele.isbn !== searchResults[idx].isbn;
     //     });
-    //     window.localStorage.setItem('trl', JSON.stringify(defaultList));
+    //     window.localStorage.setItem('Reading List', JSON.stringify(defaultList));
     //     console.log(defaultList);
     //}else
 
