@@ -26,7 +26,7 @@ let saveToLocal = []; //Array used for local storage
 
 let defaultList= []; //the default list
 let userLists = [{name: "My TLR", array: defaultList}]; //Array of objs storing the users created lists
-let currentList = []; // Used for storing the current lists book data
+let currentList; // Used for storing the current list being displayed
 
 
 // Class decleration for easier acces of JSON data later.
@@ -43,7 +43,7 @@ class book {
         this.pageCount = pageCount;
         this.published = published;
         this.isbn = isbn;
-        this.inList = false;   
+        this.inList = [];   
     }
 
     //Creates elements for each data point and appends them to a div
@@ -96,18 +96,6 @@ class book {
 }// class book
 
 
-// if(typeof(localStorage.getItem("trl"))=== "undefined"){
-//     // If fresh, create the list
-//     if(saveToLocal === []){
-//         window.localStorage.setItem("trl", saveToLocal);
-//     }
-// }
-// else {
-//     saveToLocal = JSON.parse(window.localStorage.getItem("trl"));
-// }
-// console.log(saveToLocal);
-console.log('before check');
-console.log(userLists);
 checkLocal();
 
 ////////////////////////////////////////////////////////////
@@ -120,7 +108,6 @@ $inpDivEle.on("submit", function(event){
     resetResults();
     // If nothing was typed in : do nothing
     if($inpSearchEle.val()===""){
-        console.log("empty");
         return;
     }
     search = $inpSearchEle.val();
@@ -131,9 +118,60 @@ $inpDivEle.on("submit", function(event){
 
 
 //When you click an add or remove button
-$("#results").on("click", "button", function(event){
-    addRemoveFromSearch(this);   
-});
+$("#results").on("click", "button", function(btn){
+        console.log(btn.target);
+        if(!btn.target.classList.contains("removeButton")){
+            let divEle = btn.target.id+"Div";
+       
+            document.getElementById(divEle).classList.toggle("show");
+        }
+        else {
+            let remIdx;
+            userLists.forEach(function(obj, i){
+                if(obj.name === currentList){
+                    remIdx=i;
+                }
+            });
+            console.log(searchResults);
+            userLists[remIdx].array.splice(btn.target.id, 1);
+            console.log(searchResults);
+        }
+
+    // Close the dropdown menu if the user clicks outside of it
+    window.onclick = function(event) {
+        if (btn.target !== event.target) {
+            let dropdowns = document.getElementsByClassName("dropdown-content");
+            for (let i = 0; i < dropdowns.length; i++) {
+                let openDropdown = dropdowns[i];
+                if (openDropdown.classList.contains('show')) {
+                    openDropdown.classList.remove('show');
+                }
+            }
+        }
+    }// Windo click event listener
+
+//--------------------------On Click Menu---------------------------------    
+    $(`#${btn.target.id}OutDiv`).on("click", "a", function(event){
+        event.preventDefault();
+        $(`#${btn.target.id}OutDiv`).off();
+            let idx = btn.target.id; // position in searchResults
+            let list = event.target.textContent; //name of the list adding to
+            let listIdx; // where that list is in userLists
+            userLists.forEach(function(obj, i){
+                if(obj.name === list){
+                    listIdx = i;
+                }
+
+            });
+
+            //idx the position in the search array
+            //list the name of user created list
+            addRemoveFromLists(idx, list, listIdx);
+           
+    });//Results link Event Listener        
+});//Results button event listener
+
+
 
 window.addEventListener('resize', function(event){
     if(!$resultsDivEle.is(':empty')){
@@ -164,7 +202,7 @@ $("#inputElements").on("click", "button", function(event){
 
 
 $subNavEle.on("click", "a", function(event){
-    console.log(event.target);
+    
 
 //---------------------Create List-------------------------    
     if(event.target.id === "createList"){
@@ -185,10 +223,7 @@ $subNavEle.on("click", "a", function(event){
             //check to see if the list already exists
             let bool = false;
             userLists.forEach(function(list){
-                console.log(list.name);
-                console.log($inputVal);
                 if(list.name === $inputVal){
-                    console.log("yess");
                     bool=true;
                     $resultsDivEle.append($('<p>This list already exits please create another</p>'));
                 }
@@ -201,14 +236,9 @@ $subNavEle.on("click", "a", function(event){
             let tempArray =[];
             let tempObj = {name: $inputVal, array: tempArray};
            
-            userLists.push({name: $inputVal, array: tempArray});
+            userLists.push(tempObj);
             window.localStorage.setItem(`${$inputVal}`, JSON.stringify(tempObj));
-            console.log("during event");
-            console.log(userLists);
-            console.log(localStorage);
-
-
-
+    
         });//New List Input Event listener
     }//If Create List 
 
@@ -217,15 +247,21 @@ $subNavEle.on("click", "a", function(event){
         $listOptionsEle.empty();
         //Display Every list
         userLists.forEach(function(list){
-            let $tempH3 = $(`<a id="listNames" href="#">${list.name}<a>`);
+            let $tempH3 = $(`<a href="#">${list.name}<a>`);
             $listOptionsEle.append($tempH3);
         });
 
         $listOptionsEle.on("click", "a", function(aEvent){
             if(aEvent.target.textContent === "My TLR"){
-                displayResults(defaultList);
+                let tempList = objectToBook(userLists[0].array);
+                console.log(tempList);
+                largeDisplayList(tempList);
+                currentList="trl";
             }
         });
+
+
+
 
     }// If My Lists
 
@@ -239,6 +275,7 @@ $subNavEle.on("click", "a", function(event){
 function ajaxCall(){
     // If the author is given
     // This is indicated with a "by"
+    done=false;
     if(search.toLowerCase().includes("by")){
         let tempArr = search.toLowerCase().split(" ");
         let byIndex = tempArr.lastIndexOf("by");
@@ -263,9 +300,11 @@ function ajaxCall(){
                     
                     if(window.innerWidth < 780){    
                         displayResults(searchResults);
+                       
                     }
                     else {
                         largeDisplayResults(searchResults);
+                        
                     }
 
                 }
@@ -401,8 +440,52 @@ function largeDisplayResults(res){
     let $bookDivsDiv = $("<div class='bookDivsDiv'>");
     res.forEach(function(book, idx){
         let tempBookDiv = book.addDataToDiv();
+
+        //click menu button add
+        let $dropDiv = $(`<div id="${idx}OutDiv" class="dropdown">`);
+        let tempButton = $(`<button id="${idx}" class="listButton">Add to List</button>`);
+        let $dropContDiv= $(`<div id="${idx}Div" class="dropdown-content">`);
+        userLists.forEach(function(list, userIdx){
+            let a = $(`<a id="${userIdx}A" class="dropLinks" href="#">${list.name}</a>`);
+            $dropContDiv.append(a);
+        });
+        $dropDiv.append(tempButton,$dropContDiv);
+                                    
+
+           
+
+        tempBookDiv.children(".bookCoverDiv").append($dropDiv);
+        $bookDivsDiv.append(tempBookDiv);
+        if(i===2){
+            i=1;
+            $resultsDivEle.append($bookDivsDiv);
+            $bookDivsDiv = $("<div class='bookDivsDiv'>");
+        }
+        else if(idx === res.length-1){
+            let $blankDiv = $('<div class="blankDiv">');
+            $bookDivsDiv.append($blankDiv);
+            $resultsDivEle.append($bookDivsDiv);
+        }
+        else{
+            i++;
+        }
+    });
+}
+
+function displayList(res){
+
+}
+
+function largeDisplayList(res){
+    $('.bookDivsDiv').remove();
+    $resultsDivEle.empty();
+    let i=1;
+    let $bookDivsDiv = $("<div class='bookDivsDiv'>");
+    res.forEach(function(book, idx){
+        let tempBookDiv = book.addDataToDiv();
         let tempButton = 
-            $(`<button class="listButton" id="${idx}">Add to List</button>`);
+             $(`<button class="removeButton" id="${idx}">Remove</button>`);
+
 
         tempBookDiv.children(".bookCoverDiv").append(tempButton);
         $bookDivsDiv.append(tempBookDiv);
@@ -411,12 +494,16 @@ function largeDisplayResults(res){
             $resultsDivEle.append($bookDivsDiv);
             $bookDivsDiv = $("<div class='bookDivsDiv'>");
         }
+        else if(idx === res.length-1){
+            let $blankDiv = $('<div class="blankDiv">');
+            $bookDivsDiv.append($blankDiv);
+            $resultsDivEle.append($bookDivsDiv);
+        }
         else{
             i++;
         }
     });
 }
-
 
 function resetResults(){
     search = "";
@@ -433,7 +520,7 @@ function displayNoResults(){
 }//displayNoResults()
 
 
-
+ 
 //---------------------------------------------------------
 //                         Storage
 //---------------------------------------------------------
@@ -448,52 +535,73 @@ function checkLocal(){
         
     }
     else {
-        defaultList = JSON.parse(window.localStorage.getItem("trl"));
+        userLists[0] = JSON.parse(window.localStorage.getItem("trl"));
     }
-    console.log(defaultList);
 
     // User Lists
     for(let i =1; i< localStorage.length; i++){
             userLists.push(JSON.parse(window.localStorage.getItem(
                 localStorage.key(i))));
         }
-    console.log("after check");
+    console.log("User List");
     console.log(userLists);
+    console.log("Local Storage");
     console.log(localStorage);
 } // checkLocal()
 
-function addRemoveFromSearch(btn){
-    let idx = btn.id;
-    if($(btn).html()==="Add to List"){
-        $(btn).html("Remove");
-        $(btn).css({backgroundColor: "red"});
-        
-        searchResults[idx].inList=true;
-        defaultList.push(searchResults[idx].toObject());
-        window.localStorage.setItem('trl', JSON.stringify(defaultList));
-        console.log(defaultList);
-    }
-    else{
-        $(btn).html("Add to List");
-        $(btn).css({background: "transparent"});
+function addRemoveFromLists(idx, listName, listIdx){
+    //idx - the idx inside searchResults
+    //listName - the name of the list clicked
+    //listIdx - the idx of the list clicked in userLists
+    let list = userLists[listIdx];
+    let tempObj = {name: listName, array: list.array}
 
-        //Removes the book attached to the button on the serach page
-        //from the local storage array
-        defaultList = defaultList.filter(function(ele){
-            return ele.isbn !== searchResults[idx].isbn;
-        });
-        window.localStorage.setItem('trl', JSON.stringify(defaultList));
-        console.log(defaultList);
-    }//else
-}//addRemoveFromSearch
+    list.array.push(searchResults[idx].toObject());
+    console.log(list.array);
+    if(listName === "My TLR"){ listName="trl";}
+    console.log(listName);
+    window.localStorage.setItem(listName, JSON.stringify(tempObj));
+
+
+    
+   
+   
+
+    // if($(btn).html()==="Add to List"){
+    //     $(btn).html("Remove");
+    //     $(btn).css({backgroundColor: "red"});
+        
+    //     searchResults[idx].inList=true;
+    //     defaultList.push(searchResults[idx].toObject());
+    //     window.localStorage.setItem('trl', JSON.stringify(defaultList));
+    //     console.log(defaultList);
+    // }
+    // else{
+    //     $(btn).html("Add to List");
+    //     $(btn).css({background: "transparent"});
+
+    //     //Removes the book attached to the button on the serach page
+    //     //from the local storage array
+    //     defaultList = defaultList.filter(function(ele){
+    //         return ele.isbn !== searchResults[idx].isbn;
+    //     });
+    //     window.localStorage.setItem('trl', JSON.stringify(defaultList));
+    //     console.log(defaultList);
+    //}else
+
+  
+
+}//addRemoveFromLists
 
 function objectToBook(list){
+    let tempArray = [];
     list.forEach(function(obj){
         let tempBook = new book (obj.title, obj.author, obj.cover,
                                  obj.description, obj.pageCount, obj.publishedDate, obj.isbn);
     
-        currentList.push(tempBook);
+       tempArray.push(tempBook);
     });
+    return tempArray;
 }
 
 

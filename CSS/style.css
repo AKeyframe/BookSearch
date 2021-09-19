@@ -83,7 +83,17 @@ main {
     margin: 15px;
 }
 
+a {
+    color: #dbcba9;
+    text-decoration: none;
+    margin: 10px;
+    
+}
 
+#listOptions {
+    padding: 0px;
+    margin: 15px;
+}
 
 #results {
     color: #dbcba9;
@@ -144,6 +154,7 @@ main {
     border-radius: 2%;
     
 }
+
 .bookInfo {color: #dbcba9;}
 h2.bookInfo { font-size: 20px; margin: 8px 1px 2px 1px}
 h4.bookInfo { font-size: 14px; margin: 1px 1px 3px 1px}
@@ -157,6 +168,10 @@ p.bookInfo {font-size: 10px; margin: 1px;}
     grid-area: img;
 }
 
+.blankDiv {
+    width:365px;
+    margin: 20px auto;
+}
 
 .listButton {
    width: 80px;
@@ -203,6 +218,61 @@ footer > img {
 }
 
 
+
+
+
+
+
+.listButton:hover, .listButton:focus {
+    background-color: #2980B9;
+  }
+  
+  /* outer div */
+  .dropdown {
+    position: relative;
+    display: inline-block;
+  }
+  
+  /* Dropdown Content (Hidden by Default) */
+  .dropdown-content {
+    display: none;
+    position: absolute;
+    background-color: black;
+    border: solid #dbcba9;
+    border-radius: 15px;
+    min-width: 160px;
+    box-shadow: 0px 8px 16px 0px rgba(0,0,0,0.2);
+    z-index: 1;
+  }
+  
+  /* inner div */
+  .dropdown-content a {
+    color: #dbcba9;
+    border: solid #dbcba9 1px;
+    border-radius: 15px;
+    padding: 12px 16px;
+    text-decoration: none;
+    display: block;
+  }
+  
+  /* Change color of dropdown links on hover */
+  .dropdown-content a:hover {background-color: #8d6237}
+  
+  /* Show the dropdown menu */
+  .show {display:block;}
+
+  a.dropLinks {
+      padding: 5px;
+      margin: 5px;
+  }
+
+
+
+
+
+
+
+
 @media only screen and (min-width: 600px){
     header {
 
@@ -235,6 +305,11 @@ footer > img {
      }
 
     .bookDiv {
+        margin: 20px 40px;
+    }
+
+    .blankDiv {
+       
         margin: 20px 40px;
     }
 }
