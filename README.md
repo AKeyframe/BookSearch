@@ -19,7 +19,7 @@ An online app that allows users to search for books and add them to their readin
 ## Getting started
 ---
 
-[Here](https://book-search-jet.vercel.app/) is a link to the app. 
+[Here](https://bookworms-bible-jet.vercel.app/) is a link to the app. 
 
 ---
 ## Screenshots
