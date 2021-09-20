@@ -414,6 +414,8 @@ function ajaxCall() {
 
                 }
                 else {
+
+                    
                     displayNoResults();
                 }
             }); // .then() 
