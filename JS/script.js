@@ -99,7 +99,11 @@ class book {
 
 //Checks local storage for information
 //If there isn't any create some defaults
+
+console.log("Varibles initalized");
 checkLocal();
+console.log("After CheckLocal");
+
 
 ////////////////////////////////////////////////////////////
 //                     Listeners
@@ -108,13 +112,16 @@ checkLocal();
 //Main Search Listener 
 $inpDivEle.on("submit", function (event) {
     event.preventDefault();
+    console.log("Listener Activated");
     resetResults();
+    console.log("Results Reset");
     // If nothing was typed in : do nothing
     if ($inpSearchEle.val() === "") {
         return;
     }
     search = $inpSearchEle.val();
     $inpSearchEle.val("");
+    console.log("Calling AJAX");
     ajaxCall();
 
 }); // Main Search Listener
@@ -390,13 +397,19 @@ function ajaxCall() {
             (data) => {
                 console.log(data);
                 if (data.totalItems !== 0) {
+                    console.log("Data Recieved");
                     jsonToBook(data.items);
+                    console.log("Data Converted to Book");
 
                     if (window.innerWidth < 780) {
+                        console.log("Small Display");
                         displayResults(searchResults);
+                        console.log("Displayed Correctly");
                     }
                     else {
+                        console.log("Small Display");
                         largeDisplayResults(searchResults);
+                        console.log("Displayed Correctly");
                     }
 
                 }
@@ -526,6 +539,7 @@ function largeDisplayResults(res) {
     let i = 1;
     let $bookDivsDiv = $("<div class='bookDivsDiv'>");
     res.forEach(function (book, idx) {
+        
         let tempBookDiv = book.addDataToDiv();
 
         //click menu button add
@@ -635,7 +649,8 @@ function displayNoResults() {
 function checkLocal() {
     //If the local storage does not exist create it
     //To Read List
-    if (typeof (localStorage.getItem("Reading List")) === "undefined") {
+    let temp = localStorage.getItem("Reading List");
+    if (!temp) {
         // If fresh, create the list
         userLists[0] = { name: "Reading List", array: defaultList };
         window.localStorage.setItem("Reading List", JSON.stringify(userLists[0]));
