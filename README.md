@@ -1,7 +1,7 @@
 ---
 # Bookworm's Bible
 ---
-An online app that allows users to search for books and add them to their reading list. 
+A purely frontend, Javascript and jQuery web application that allows readers to search for books using the Google Books API. Readers can then create and curate book lists from the results, allowing readers to easily keep track of books they wish to read and have already read.
 
 ---
 ## Technologies Used
